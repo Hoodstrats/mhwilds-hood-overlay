@@ -1,0 +1,52 @@
+{
+    "active_color": 4278255360,
+    "auto_start": true,
+    "background": true,
+    "background_color": 1358954496,
+    "background_locked": false,
+    "background_size_x": 333,
+    "background_size_y": 479,
+    "bg_loc": {
+        "x": 2208,
+        "y": 594
+    },
+    "bold_font": true,
+    "expired_color": 4294901760,
+    "font_name": "Arial",
+    "font_size": 25,
+    "fps_active": true,
+    "game_settings": {
+        "resolution": {
+            "x": 1920,
+            "y": 1080
+        }
+    },
+    "italic_font": false,
+    "items_per_column": 16,
+    "loc": {
+        "x": 2224,
+        "y": 594
+    },
+    "max_update_rate": 5,
+    "overlay": true,
+    "remove_expired": false,
+    "space_between_buffs": 30,
+    "space_between_columns": 333,
+    "tracker_settings": {
+        "adamantpill": true,
+        "adamantseed": true,
+        "armorskin": true,
+        "cooldrink": true,
+        "dashjuice": true,
+        "demondrug": true,
+        "demonpowder": true,
+        "hardshellpowder": true,
+        "hotdrink": true,
+        "immunizer": true,
+        "megaarmorskin": true,
+        "megademondrug": true,
+        "mightpill": true,
+        "mightseed": true
+    },
+    "use_columns": true
+}
