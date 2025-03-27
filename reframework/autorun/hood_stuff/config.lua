@@ -33,6 +33,11 @@ local defaults = {
 	}
 }
 
+function config.Reset()
+	cfg = defaults
+	json.dump_file("hood-timers.json", cfg)
+end
+
 function config.InitConfig()
 	if not cfg then
 		cfg = defaults

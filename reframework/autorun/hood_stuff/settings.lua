@@ -208,6 +208,7 @@ function settings_ui.DrawSettings()
 		local bottom_pres = json.load_file("hood-timers-preset-bottom.json")
 		if bottom_pres then
 			config.cfg = bottom_pres
+			draw2d.SetFontSettings(config.cfg.font_size, config.cfg.bold_font, config.cfg.italic_font, config.cfg.font_name)
 		else
 			re.msg("Bottom preset config file not found, using current settings")
 		end
@@ -218,6 +219,7 @@ function settings_ui.DrawSettings()
 		local right_pres = json.load_file("hood-timers-preset-right.json")
 		if right_pres then
 			config.cfg = right_pres
+			draw2d.SetFontSettings(config.cfg.font_size, config.cfg.bold_font, config.cfg.italic_font, config.cfg.font_name)
 		else
 			re.msg("Right preset config file not found, using current settings")
 		end
@@ -227,16 +229,22 @@ function settings_ui.DrawSettings()
 		local top_pres = json.load_file("hood-timers-preset-top.json")
 		if top_pres then
 			config.cfg = top_pres
+			draw2d.SetFontSettings(config.cfg.font_size, config.cfg.bold_font, config.cfg.italic_font, config.cfg.font_name)
 		else
 			re.msg("Right preset config file not found, using current settings")
 		end
 	end
 	imgui.same_line()
 	if imgui.button("Reset") then
-		config.cfg = nil
-		config.InitConfig()
-		json.dump_file("hood-timers.json", config.cfg)
+		local default = json.load_file("hood-timers-preset-default.json")
+		if default then
+			config.cfg = default
+			draw2d.SetFontSettings(config.cfg.font_size, config.cfg.bold_font, config.cfg.italic_font, config.cfg.font_name)
+		else
+			re.msg("Right preset config file not found, using current settings")
+		end
 	end
+	imgui.new_line()
 end
 
 return settings_ui
