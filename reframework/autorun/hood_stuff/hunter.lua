@@ -32,14 +32,6 @@ function hunter.get_food_buffs()
 		return
 	end
 	-- returns app.cMealEffect which we can access stuff like
-	-- get_MaxHealthAdd()
-	-- get_MaxStaminaAdd()
-	-- get_AttackAdd()
-	-- get_DefenceAdd()
-	-- get_AttrResistAdd()
-	-- get_DurationTimer()
-	-- _MealEffect itself has timer fields:
-	-- _DurationTimer
 	local food_buffs = hunter.status:get_field("_MealEffect")
 	if food_buffs ~= nil then
 		-- hunter.Resists = {}
@@ -102,10 +94,8 @@ function hunter.get_food_buffs()
 	end
 end
 
--- FIXME: check if this is actually getting initialized
 function hunter.init_hunter()
 	-- app.PlayerManager
-	-- hunter.hunter = sdk.get_managed_singleton("app.PlayerManager")
 	hunter.hunter = hook.GetSingleton("app.PlayerManager", false)
 
 	if not hunter.hunter then

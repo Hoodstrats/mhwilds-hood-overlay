@@ -3,7 +3,6 @@
     "auto_start": true,
     "background": true,
     "background_color": 1358954496,
-    "background_locked": false,
     "background_size_x": 2479,
     "background_size_y": 25,
     "bg_loc": {
@@ -14,7 +13,7 @@
     "expired_color": 4294901760,
     "font_name": "Tahoma",
     "font_size": 12,
-    "fps_active": true,
+    "fps_active": false,
     "game_settings": {
         "resolution": {
             "x": 1920,
@@ -46,7 +45,7 @@
         "megaarmorskin": true,
         "megademondrug": true,
         "mightpill": true,
-        "mightseed": true
-    },
-    "use_columns": true
+        "mightseed": true,
+        "food": true
+    }
 }

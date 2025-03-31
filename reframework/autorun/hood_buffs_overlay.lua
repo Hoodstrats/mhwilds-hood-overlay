@@ -1,15 +1,18 @@
 --/////////////////////////////////////--
 -- Mod = "HoodTimers: Buff Overlay"
 -- Author = "hoodstrats"
--- Updated = "03/25/2025"
--- Version = "v1.0.0"
+-- Updated = "03/28/2025"
+-- Version = "v1.0.2"
 --/////////////////////////////////////--
 
+local re = re
+local imgui = imgui
+local json = json
 local hook = require("hood_stuff.hooker")
 local hunter = require("hood_stuff.hunter")
 local config = require("hood_stuff.config")
 local settings = require("hood_stuff.settings")
-local debug = require("hood_stuff.debug")
+-- local debug = require("hood_stuff.debug")
 local draw2d = require("hood_stuff.drawd2d")
 
 config.InitConfig()
@@ -42,31 +45,7 @@ local function update_hook(args)
 	init_mod()
 end
 
--- FIXME: need to unload everything when this isn't updating anymore specifically teh d2d.draw stuff
--- actual player update method, the PlayerManager seems to be the entire game
 hook.HookThis("app.cHunterEffect", "update(app.HunterCharacter)", update_hook, function(retval) end)
-
-
--- these seem to happen at the main menu not when you're actually loading the character data
-hook.HookThis("ace.SaveDataManagerBase", "request(ace.SaveDataManagerBase.cRequest)", function(args)
-	-- TODO: turn this into a method of its own instead of having it here ugly
-	local type = sdk.to_managed_object(args[3]):get_RqType()
-	if type == 1 then
-		-- these seems to happen when theres actually a save file or on first load of files
-		print("loading character")
-		if loaded then
-			loaded = false
-			hunter.hunter = nil
-			print("Mod reset")
-		end
-	elseif type == 2 then
-		print("found character")
-	elseif type == 3 then
-		print("maybe character")
-	end
-end, function(retval)
-	-- this happens whenever saving/checking save data happens
-end)
 
 re.on_draw_ui(function()
 	if imgui.collapsing_header("--- Hood Overlay Settings ---") then

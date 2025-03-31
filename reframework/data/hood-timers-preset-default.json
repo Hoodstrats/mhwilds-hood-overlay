@@ -3,7 +3,6 @@
     "auto_start": true,
     "background": false,
     "background_color": 4278190080,
-    "background_locked": false,
     "background_size_x": 355,
     "background_size_y": 500,
     "bg_loc": {
@@ -22,7 +21,7 @@
         }
     },
     "italic_font": false,
-    "items_per_column": 7,
+    "items_per_column": 16,
     "loc": {
         "x": 0,
         "y": 0
@@ -46,7 +45,7 @@
         "megaarmorskin": true,
         "megademondrug": true,
         "mightpill": true,
-        "mightseed": true
-    },
-    "use_columns": false
+        "mightseed": true,
+        "food": true
+    }
 }
