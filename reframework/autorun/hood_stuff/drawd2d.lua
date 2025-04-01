@@ -13,25 +13,9 @@ local item_icons = {
 
 draw.is_drawing = false
 
---- @param size number
---- @param bold boolean
---- @param italic boolean
---- @param font_name string
-function draw.SetFontSettings(size, bold, italic, font_name)
-	config.cfg.font_size = size
-	config.cfg.font_name = font_name or "Tahoma"
+function draw.SetFontSettings()
 	-- Recreate font if it already exists
-	if font then
-		if bold and italic then
-			font = d2d.Font.new(config.cfg.font_name, config.cfg.font_size, bold, italic)
-		elseif bold then
-			font = d2d.Font.new(config.cfg.font_name, config.cfg.font_size, bold)
-		elseif italic then
-			font = d2d.Font.new(config.cfg.font_name, config.cfg.font_size, italic)
-		else
-			font = d2d.Font.new(config.cfg.font_name, config.cfg.font_size)
-		end
-	end
+	font = d2d.Font.new(config.cfg.font_name, config.cfg.font_size, config.cfg.bold_font, config.cfg.italic_font)
 end
 
 -- this can't be changed live so I added a "edit buffs" button to settings
@@ -76,6 +60,7 @@ local function display_with_columns(hunter, x, color_active, color_expired)
 		local column = math.floor(item_counter / items_per_column)
 		local column_x = x + (column * column_width)
 		local row_y = config.cfg.loc.y + ((item_counter % items_per_column) * config.cfg.space_between_buffs)
+		-- TODO: add similar functionality for the icons only
 
 		if item_name ~= "Food" then
 			local total_seconds = hunter.items[k]
@@ -95,8 +80,17 @@ local function display_with_columns(hunter, x, color_active, color_expired)
 			end
 			if total_seconds > 0 then
 				if icon then
-					-- NOTE: example of icon + timer mode
-					d2d.image(icon, column_x - 40, row_y - 2, 32, 32)
+					if config.cfg.icon_size ~= 32 then
+						d2d.image(
+							icon,
+							column_x - config.cfg.icon_loc.x,
+							row_y - config.cfg.icon_loc.y,
+							config.cfg.icon_size,
+							config.cfg.icon_size
+						)
+					else
+						d2d.image(icon, column_x - 40, row_y - 2, config.cfg.icon_size, config.cfg.icon_size)
+					end
 					d2d.text(font, formatted_time, column_x, row_y, color_active)
 				else
 					d2d.text(font, item_name .. ": " .. formatted_time, column_x, row_y, color_active)
@@ -110,7 +104,17 @@ local function display_with_columns(hunter, x, color_active, color_expired)
 				end
 			else
 				if icon then
-					d2d.image(icon, column_x - 40, row_y - 2, 32, 32)
+					if config.cfg.icon_size ~= 32 then
+						d2d.image(
+							icon,
+							column_x - config.cfg.icon_loc.x,
+							row_y - config.cfg.icon_loc.y,
+							config.cfg.icon_size,
+							config.cfg.icon_size
+						)
+					else
+						d2d.image(icon, column_x - 40, row_y - 2, config.cfg.icon_size, config.cfg.icon_size)
+					end
 					d2d.text(font, ": expired!", column_x, row_y, color_expired)
 				else
 					d2d.text(font, item_name .. ": expired!", column_x, row_y, color_expired)
@@ -127,14 +131,34 @@ local function display_with_columns(hunter, x, color_active, color_expired)
 						icon = item_icons.status_icons["food"]
 					end
 					if icon then
-						d2d.image(icon, column_x - 40, row_y - 2, 32, 32)
+						if config.cfg.icon_size ~= 32 then
+							d2d.image(
+								icon,
+								column_x - config.cfg.icon_loc.x,
+								row_y - config.cfg.icon_loc.y,
+								config.cfg.icon_size,
+								config.cfg.icon_size
+							)
+						else
+							d2d.image(icon, column_x - 40, row_y - 2, config.cfg.icon_size, config.cfg.icon_size)
+						end
 						d2d.text(font, formatted_time, column_x, row_y, color_active)
 					else
 						d2d.text(font, "Food: " .. formatted_time, column_x, row_y, color_active)
 					end
 				else
 					if icon then
-						d2d.image(icon, column_x - 40, row_y - 2, 32, 32)
+						if config.cfg.icon_size ~= 32 then
+							d2d.image(
+								icon,
+								column_x - config.cfg.icon_loc.x,
+								row_y - config.cfg.icon_loc.y,
+								config.cfg.icon_size,
+								config.cfg.icon_size
+							)
+						else
+							d2d.image(icon, column_x - 40, row_y - 2, config.cfg.icon_size, config.cfg.icon_size)
+						end
 						d2d.text(font, ": expired!", column_x, row_y, color_expired)
 					else
 						d2d.text(font, "Food: expired!", column_x, row_y, color_expired)

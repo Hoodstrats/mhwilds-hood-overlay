@@ -41,6 +41,12 @@ local function manual_buff_tracking()
 		return
 	end
 
+	-- TODO: makes sure this works on a fresh install by making config.cfg.buff_order have a default order
+	-- ensure that we don't have to press apply order before seeing any changes (making buffs disappear)
+	if config.cfg.manual_buff_tracking and config.cfg.buff_order ~= nil then
+		config.apply_buff_order()
+	end
+
 	-- Create sorted display entries by name
 	local buff_entries = {}
 	for k, v in pairs(items_db.item_timers_en) do
@@ -81,7 +87,7 @@ local function manual_buff_tracking()
 		local cur_pos = config.cfg.buff_order[k] or i
 		local pos_index = cur_pos
 
-		changed, pos_index = imgui.combo(v, pos_index, buff_count)
+		changed, pos_index = imgui.combo(v .. " " .. "(" .. tostring(pos_index) .. ")", pos_index, buff_count)
 
 		if changed then
 			local new_pos = pos_index
@@ -132,11 +138,11 @@ local function overlay_bg_settings()
 	end
 	changed, config.cfg.background_color = imgui.color_picker_argb("Bg Color", config.cfg.background_color)
 	if not config.cfg.background_locked then
-		changed, config.cfg.background_size_x = imgui.slider_int("Width", config.cfg.background_size_x, 0, 5000)
+		changed, config.cfg.background_size_x = imgui.slider_int("Width", config.cfg.background_size_x, 0, 6000)
 	end
-	changed, config.cfg.background_size_y = imgui.slider_int("Height", config.cfg.background_size_y, 0, 5000)
+	changed, config.cfg.background_size_y = imgui.slider_int("Height", config.cfg.background_size_y, 0, 6000)
 	if not config.cfg.background_locked then
-		changed, config.cfg.bg_loc.x = imgui.slider_int("BACKGROUND X POS", config.cfg.bg_loc.x, 0, 3840)
+		changed, config.cfg.bg_loc.x = imgui.slider_int("BACKGROUND X POS", config.cfg.bg_loc.x, 0, 6000)
 		changed, config.cfg.bg_loc.y = imgui.slider_int("BACKGROUND Y POS", config.cfg.bg_loc.y, 0, 2160)
 	else
 		config.cfg.bg_loc.x = config.cfg.loc.x
@@ -176,17 +182,10 @@ local function overlay_settings()
 		if window_open then
 			if imgui.collapsing_header("Position and Spacing") then
 				imgui.new_line()
-				changed, config.cfg.loc.x = imgui.slider_int("Buffs X POS", config.cfg.loc.x, 0, 3840)
+				changed, config.cfg.loc.x = imgui.slider_int("Buffs X POS", config.cfg.loc.x, 0, 6000)
 				changed, config.cfg.loc.y = imgui.slider_int("Buffs Y POS", config.cfg.loc.y, 0, 2160)
-				if config.cfg.show_effect then
-					imgui.new_line()
-					changed, config.cfg.effect_loc.x =
-						imgui.slider_int("Effect X POS (What the buff does)", config.cfg.effect_loc.x, 0, 3840)
-					-- changed, config.cfg.effect_loc.y = imgui.slider_int("Effect Y POS", config.cfg.effect_loc.y, 0, 2160)
-				end
-				imgui.text("When only 1 column (the default)")
 				changed, config.cfg.space_between_buffs =
-					imgui.slider_int("Space Between Buffs", config.cfg.space_between_buffs, 10, 50)
+					imgui.slider_int("Space Between Buffs", config.cfg.space_between_buffs, 10, 1000)
 				imgui.new_line()
 
 				if config.cfg.items_per_column <= 0 then
@@ -211,12 +210,7 @@ local function overlay_settings()
 				-- font dropdown
 				choose_font_dropdown(changed)
 				if imgui.button("Set Font Settings") then
-					draw2d.SetFontSettings(
-						config.cfg.font_size,
-						config.cfg.bold_font,
-						config.cfg.italic_font,
-						config.cfg.font_name
-					)
+					draw2d.SetFontSettings()
 				end
 			end
 			if imgui.collapsing_header("Edit Font Color") then
@@ -281,6 +275,7 @@ function settings_ui.DrawSettings()
 	-- NOTE: gets checked on INITHUNTER method in hunter lua
 	changed, config.cfg.auto_start = imgui.checkbox("Auto start", config.cfg.auto_start)
 	imgui.new_line()
+	imgui.text("Enabling icons moves the buffs over to the left a bit remember to adjust the buff positions")
 	changed, config.cfg.show_icons = imgui.checkbox("Show Item Icons", config.cfg.show_icons)
 	if config.cfg.show_icons then
 		config.cfg.show_status_icons = false
@@ -290,11 +285,32 @@ function settings_ui.DrawSettings()
 	if config.cfg.show_status_icons then
 		config.cfg.show_icons = false
 	end
+
 	imgui.same_line()
-	changed, config.cfg.show_effect = imgui.checkbox("Show Desc", config.cfg.show_effect)
+	changed, config.cfg.show_effect = imgui.checkbox("Show Effect", config.cfg.show_effect)
 	imgui.same_line()
 	changed, config.cfg.remove_expired = imgui.checkbox("Automatically remove expired", config.cfg.remove_expired)
 	imgui.new_line()
+
+	if config.cfg.show_effect then
+		changed, config.cfg.effect_loc.x =
+			imgui.slider_int("Effect X POS (What the buff does)", config.cfg.effect_loc.x, 0, 6000)
+		-- changed, config.cfg.effect_loc.y = imgui.slider_int("Effect Y POS", config.cfg.effect_loc.y, 0, 2160)
+	end
+	-- check if we're using any of these options then give icon size slider
+	if config.cfg.show_status_icons or config.cfg.show_icons then
+		if config.cfg.icon_size == nil then
+			config.cfg.icon_size = 32
+		end
+		if config.cfg.icon_size == 32 then
+			config.cfg.icon_loc.x = -40
+			config.cfg.icon_loc.y = -2
+		end
+		imgui.text("Default size is 32")
+		changed, config.cfg.icon_size = imgui.slider_int("Icon Size", config.cfg.icon_size, 10, 120)
+		changed, config.cfg.icon_loc.x = imgui.slider_int("Icon X POS", config.cfg.icon_loc.x, 0, 6000)
+		changed, config.cfg.icon_loc.y = imgui.slider_int("Icon Y POS", config.cfg.icon_loc.y, 0, 2160)
+	end
 
 	imgui.text("FOR MORE CONTROL, PRESS THIS BUTTON, CHECK EACH DROP DOWN INSIDE NEW WINDOW")
 	overlay_settings()
@@ -308,30 +324,9 @@ function settings_ui.DrawSettings()
 		local bottom_pres = json.load_file("hood-timers-preset-bottom.json")
 		if bottom_pres then
 			config.cfg = bottom_pres
-			draw2d.SetFontSettings(
-				config.cfg.font_size,
-				config.cfg.bold_font,
-				config.cfg.italic_font,
-				config.cfg.font_name
-			)
+			draw2d.SetFontSettings()
 		else
 			re.msg("Bottom preset config file not found, using current settings")
-		end
-	end
-
-	imgui.same_line()
-	if imgui.button("Load Right Config") then
-		local right_pres = json.load_file("hood-timers-preset-right.json")
-		if right_pres then
-			config.cfg = right_pres
-			draw2d.SetFontSettings(
-				config.cfg.font_size,
-				config.cfg.bold_font,
-				config.cfg.italic_font,
-				config.cfg.font_name
-			)
-		else
-			re.msg("Right preset config file not found, using current settings")
 		end
 	end
 	imgui.same_line()
@@ -339,12 +334,7 @@ function settings_ui.DrawSettings()
 		local top_pres = json.load_file("hood-timers-preset-top.json")
 		if top_pres then
 			config.cfg = top_pres
-			draw2d.SetFontSettings(
-				config.cfg.font_size,
-				config.cfg.bold_font,
-				config.cfg.italic_font,
-				config.cfg.font_name
-			)
+			draw2d.SetFontSettings()
 		else
 			re.msg("Right preset config file not found, using current settings")
 		end
@@ -354,16 +344,12 @@ function settings_ui.DrawSettings()
 		local default = json.load_file("hood-timers-preset-default.json")
 		if default then
 			config.cfg = default
-			draw2d.SetFontSettings(
-				config.cfg.font_size,
-				config.cfg.bold_font,
-				config.cfg.italic_font,
-				config.cfg.font_name
-			)
+			draw2d.SetFontSettings()
 		else
 			re.msg("Right preset config file not found, using current settings")
 		end
 	end
+	imgui.new_line()
 end
 
 return settings_ui

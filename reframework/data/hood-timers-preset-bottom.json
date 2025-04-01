@@ -6,10 +6,14 @@
     "background_size_x": 950,
     "background_size_y": 208,
     "bg_loc": {
-        "x": 928,
+        "x": 825,
         "y": 1215
     },
     "bold_font": true,
+    "effect_loc": {
+        "x": 80,
+        "y": 0
+    },
     "expired_color": 4294901760,
     "font_name": "Arial",
     "font_size": 25,
@@ -20,15 +24,24 @@
             "y": 1080
         }
     },
-    "italic_font": false,
-    "items_per_column": 7,
-    "loc": {
-        "x": 944,
-        "y": 1215
+    "icon_loc": {
+        "x": -40,
+        "y": -2
     },
+    "icon_size": 32,
+    "italic_font": false,
+    "items_per_column": 5,
+    "loc": {
+        "x": 875,
+        "y": 1251
+    },
+    "manual_buff_tracking": false,
     "max_update_rate": 5,
     "overlay": true,
     "remove_expired": false,
+    "show_effect": true,
+    "show_icons": true,
+    "show_status_icons": false,
     "space_between_buffs": 30,
     "space_between_columns": 333,
     "tracker_settings": {
@@ -39,13 +52,13 @@
         "dashjuice": true,
         "demondrug": true,
         "demonpowder": true,
+        "food": true,
         "hardshellpowder": true,
         "hotdrink": true,
         "immunizer": true,
         "megaarmorskin": true,
         "megademondrug": true,
         "mightpill": true,
-        "mightseed": true,
-        "food": true
+        "mightseed": true
     }
 }

@@ -1,8 +1,8 @@
 --/////////////////////////////////////--
 -- Mod = "HoodTimers: Buff Overlay"
 -- Author = "hoodstrats"
--- Updated = "03/28/2025"
--- Version = "v1.0.2"
+-- Updated = "04/1/2025"
+-- Version = "v1.1.1"
 --/////////////////////////////////////--
 
 local re = re
